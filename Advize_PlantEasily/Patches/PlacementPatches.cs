@@ -237,7 +237,7 @@ static class PlacementPatches
     {
         static int placementRotation;
 
-        static bool Prefix(Player __instance, Piece piece, ref bool __result, ref bool __state)
+        static bool Prefix(Player __instance, Piece piece, ref bool __state)
         {
             //Dbgl("Player.PlacePiece Prefix");
             if (!config.ModActive || !piece || !HoldingCultivator || !IsPlantOrPickable(piece.gameObject))
@@ -252,25 +252,16 @@ static class PlacementPatches
                 if (rootPlacementStatus > 1)
                 {
                     __instance.Message(MessageHud.MessageType.Center, statusMessage[rootPlacementStatus]);
-                    return __state = __result = false;
+                    return false;
                 }
             }
 
             if (config.PreventPartialPlanting)
             {
-                //foreach (int i in ghostPlacementStatus)
-                //{
-                //    if (i != 0 && !(i == 1 && __instance.m_noPlacementCost))
-                //    {
-                //        __instance.Message(MessageHud.MessageType.Center, statusMessage[i]);
-                //        return __state = __result = false;
-                //    }
-                //}
-
                 foreach (int i in ghostPlacementStatus.Where(i => i != 0 && !((int)i == 1 && __instance.m_noPlacementCost)).Select(v => (int)v))
                 {
                     __instance.Message(MessageHud.MessageType.Center, statusMessage[i]);
-                    return __state = __result = false;
+                    return false;
                 }
             }
             return true;
@@ -307,7 +298,7 @@ static class PlacementPatches
                 __instance.ConsumeResources(piece.m_resources, 0);
 
             if (config.UseStamina)
-                __instance.UseStamina(rightItem.m_shared.m_attack.m_attackStamina * count, true);
+                __instance.UseStamina(rightItem.m_shared.m_attack.m_attackStamina * count);
 
             if (rightItem.m_shared.m_useDurability && config.UseDurability)
                 rightItem.m_durability -= rightItem.m_shared.m_useDurabilityDrain * count;

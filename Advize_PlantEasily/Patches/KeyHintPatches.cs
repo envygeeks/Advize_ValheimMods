@@ -1,4 +1,6 @@
-﻿namespace Advize_PlantEasily;
+﻿using Valheim.SettingsGui;
+
+namespace Advize_PlantEasily;
 
 using HarmonyLib;
 using System.Collections.Generic;
@@ -89,7 +91,7 @@ static class KeyHintPatches
     {
         if (gamepadHint.TryGetComponent<TextMeshProUGUI>(out var gamepadKeyText))
         {
-            string controllerPlatform = ZInput.PlayStationGlyphs ? "ps5" : "xbox";
+            string controllerPlatform = ZInput.CurrentGlyph == GamepadGlyphs.Playstation ? "ps5" : "xbox";
             string[] gamepadKeys = ["dpad_left", "dpad_up", "dpad_right", "dpad_down"];
             string full = "";
 
